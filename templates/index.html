@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block jsjson %}
+{
+    "type": "page",
+    "body": {
+      "type": "form",
+      "api": "/#",
+      "body": [
+        {
+          "type": "input-file",
+          "name": "file",
+          "label": "File",
+          "accept": "*",
+          "multiple":true,
+          "receiver": "/upload",
+          "startChunkApi":"/startchunk",
+          "chunkApi":"/chunk",
+          "finishChunkApi":"/finishchunk",
+          "onEvent":{
+            "remove":{
+              "actions":[
+                {
+                  "actionType":"ajax",
+                  "args":{
+                    "api":{
+                      "url":"/delete?file=${item.name}",
+                      "method":"post",
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "debug":true
+    }
+  }
+{% endblock%}

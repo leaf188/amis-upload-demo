@@ -55,18 +55,15 @@ def startchunk():
 @app.route('/chunk',methods=['POST'])
 def chunk():
     key = request.form.get('key')
-    partNumber = request.form.get('partNumber')
-    partSize = request.form.get('partSize')
     file = request.files['file']
 
-    dzchunkbyteoffset = (int(partNumber)-1) * int(partSize)
     eTag = str(uuid.uuid1()).replace('-','')
     save_path = os.path.join(app.root_path,"upload",key.split('/')[0])
     file_path = os.path.join(save_path,eTag)
     
     try:
         with open(file_path,'ab') as f:
-            f.seek(dzchunkbyteoffset)
+            f.seek(0)
             f.write(file.stream.read())
     except OSError:
         return make_response('errors',500)
